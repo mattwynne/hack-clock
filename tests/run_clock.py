@@ -15,12 +15,10 @@ def showCurrentTime():
     now = datetime.now()
 
     # Set the hours
-    is_evening = now.hour > 12
-    display.setHours(now.hour if not is_evening else now.hour - 12)
+    display.setHours(now.hour)
 
     # Set the indicator lights
     display.setColon(True)
-    display.setEvening(is_evening)
 
     # Set the minutes
     display.setMinutes(now.minute)
@@ -29,4 +27,4 @@ def showCurrentTime():
 clock.onTick(showCurrentTime)
 
 # Set the brightness (0 to 15, 15 is the brightest)
-display.setBrightness(1)
+display.setBrightness(10)

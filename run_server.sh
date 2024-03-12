@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
+source venv/bin/activate
 #export PYTHONPATH="$PYTHONPATH:$HOME/Projects/hack-clock/lib"
 export PYTHONPATH="$PYTHONPATH:$HOME/hack-clock/lib"
 cd srv/hackclock
