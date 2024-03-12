@@ -80,7 +80,7 @@ class Clock():
         conf = context.get('clock') or {}
         keyword = conf.get('keyword', self.keyword)
 
-        args = inspect.getargspec(callback)[0]
+        args = inspect.getfullargspec(callback)[0]
         if keyword not in args:
             return callback
 

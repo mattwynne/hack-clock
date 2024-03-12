@@ -17,7 +17,7 @@ import urllib
 from dateutil import parser
 from datetime import datetime
 from hackclock.config import configuration
-from clock import Clock, ProcessStatus
+from hackclock.webapp.clock import Clock, ProcessStatus
 from bottle import Bottle, HTTPResponse, static_file, get, put, request, response, redirect, template, error
 from os import listdir
 import re
@@ -85,24 +85,26 @@ def python_save_event_loop(clock, body=None):
     version_dir = configuration.get('backup_files')
     backup_name = "%s/run_clock.%s" % (version_dir, datetime.now().isoformat())
     source_text = body.read() if body else request.body.read()
+    if type(source_text) == bytes:
+        source_text = source_text.decode('utf-8')
 
     try:
         # Save backup
         code_file = open(clock.sourceFile, 'r')
-        backup_file = open(backup_name, 'w')
+        backup_file = open(backup_name, 'w', encoding='utf-8')
         backup_file.write(code_file.read())
     except Exception as ex:
         logger.error(ex)
 
     try:
         # Save file
-        code_file = open(clock.sourceFile, 'w')
+        code_file = open(clock.sourceFile, 'w', encoding='utf-8')
         code_file.write(source_text)
 
         clock.restart()
 
         # Load saved file
-        code_file = open(clock.sourceFile, 'r')
+        code_file = open(clock.sourceFile, 'r', encoding='utf-8')
         return code_file.read()
     except Exception as ex:
         logger.error(ex)
@@ -204,24 +206,26 @@ def blocks_save_event_loop(clock, body=None):
     version_dir = configuration.get('backup_files')
     backup_name = "%s/blocks_clock.%s" % (version_dir, datetime.now().isoformat())
     blocks_state = body.read() if body else request.body.read()
+    if type(blocks_state) == bytes:
+        blocks_state = source_text.decode('utf-8')
 
     try:
         blocks_file = configuration.get('blocks_file')
 
         # Save backup
-        code_file = open(blocks_file, 'r')
-        backup_file = open(backup_name, 'w')
+        code_file = open(blocks_file, 'r', encoding='utf-8')
+        backup_file = open(backup_name, 'w', encoding='utf-8')
         backup_file.write(code_file.read())
     except Exception as ex:
         logger.error(ex)
 
     try:
         # Save file
-        code_file = open(blocks_file, 'w')
+        code_file = open(blocks_file, 'w', encoding='utf-8')
         code_file.write(blocks_state)
 
         # Load saved file
-        code_file = open(blocks_file, 'r')
+        code_file = open(blocks_file, 'r', encoding='utf-8')
         return code_file.read()
     except Exception as ex:
         logger.error(ex)
@@ -329,7 +333,7 @@ def audio_view():
 
 @application.get('/audio/list')
 def audio_list():
-    return json.dumps(audio_files())
+    return json.dumps(list(audio_files()))
 
 @application.delete('/audio/<file_id>')
 def delete_audio_file(file_id):

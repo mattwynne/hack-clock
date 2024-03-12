@@ -10,7 +10,7 @@
 
 import time
 from copy import copy
-from I2C import Adafruit_I2C
+from .I2C import Adafruit_I2C
 
 # ============================================================================
 # LEDBackpack Class

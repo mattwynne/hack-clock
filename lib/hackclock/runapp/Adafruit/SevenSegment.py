@@ -10,7 +10,7 @@
 
 import time
 import datetime
-from LEDBackpack import LEDBackpack
+from .LEDBackpack import LEDBackpack
 
 # ===========================================================================
 # 7-Segment Display
@@ -29,7 +29,7 @@ class SevenSegment:
   # Constructor
   def __init__(self, address=0x70, debug=False):
     if (debug):
-      print "Initializing a new instance of LEDBackpack at 0x%02X" % address
+      print("Initializing a new instance of LEDBackpack at 0x%02X" % address)
     self.disp = LEDBackpack(address=address, debug=debug)
 
   def writeDigitRaw(self, charNumber, value):

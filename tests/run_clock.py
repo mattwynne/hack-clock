@@ -1,16 +1,32 @@
+#!/usr/bin/python
+
+from datetime import datetime
 from hackclock.runapp.Libs.Clock import Clock
-from numbers import Number
+from hackclock.runapp.Libs.SevenSegment import Display
 
-tickCount = None
-
+# Connect to the internal machine clock
 clock = Clock()
 
-"""Describe this function...
-"""
-def clockTick():
-  global tickCount
-  tickCount = (tickCount if isinstance(tickCount, Number) else 0) + 1
+# Connect to the LED display
+display = Display()
 
+# Show the current time
+def showCurrentTime():
+    now = datetime.now()
 
-tickCount = 0
-clock.onTick(clockTick)
+    # Set the hours
+    is_evening = now.hour > 12
+    display.setHours(now.hour if not is_evening else now.hour - 12)
+
+    # Set the indicator lights
+    display.setColon(True)
+    display.setEvening(is_evening)
+
+    # Set the minutes
+    display.setMinutes(now.minute)
+
+# What to do when the internal clock ticks
+clock.onTick(showCurrentTime)
+
+# Set the brightness (0 to 15, 15 is the brightest)
+display.setBrightness(1)
