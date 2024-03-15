@@ -37,7 +37,7 @@ class Display(SevenSegment):
 
   def _writeDigit(self, charNumber, value, dot=False):
     if (charNumber > 7): return
-    if (value > 9): return
+    if (value is not None and value > 9): return
 
     hexValue = SevenSegment.digits[value] if value != None else 0x00
     self.display.setBufferRow(charNumber, hexValue)

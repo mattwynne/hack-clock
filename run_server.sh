@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd /home/iris/hack-clock
 source venv/bin/activate
 #export PYTHONPATH="$PYTHONPATH:$HOME/Projects/hack-clock/lib"
 export PYTHONPATH="$PYTHONPATH:$HOME/hack-clock/lib"
