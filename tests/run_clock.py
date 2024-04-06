@@ -4,9 +4,9 @@ from datetime import datetime
 from hackclock.runapp.Libs.Clock import Clock
 from hackclock.runapp.Libs.SevenSegment import Display
 
-# Set to bright between 6:30 AM and 7:30 PM
+# Set to bright between 6:30 AM and 7:45 PM
 brightnessStart = (6, 30)
-brightnessEnd = (19, 30)
+brightnessEnd = (19, 45)
 # Brightness is a range from 0 to 15
 brightnessValue = 10
 dimnessValue = 0
