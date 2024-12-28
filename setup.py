@@ -9,7 +9,7 @@ def all_files(newroot, oldroot):
     for root, dirs, files in os.walk(oldroot):
         fds = []
         for fd in files:
-            if not fd[0] is '.':
+            if fd[0] != '.':
                 fds.append(os.path.join(root, fd))
         relpath = os.path.relpath(root, oldroot)
         fdtuple = (os.path.join(newroot, relpath), fds)

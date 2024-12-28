@@ -10,12 +10,12 @@ console = logging.StreamHandler()
 console.setLevel(logging.WARNING)
 logger.addHandler(console)
 
-class ProcessStatus():
+class ProcessStatus:
     RUNNING = "running"
     TERMINATED = "terminated"
     NOT_STARTED = "not_started"
 
-class Clock():
+class Clock:
     name = 'clock'
     keyword = 'clock'
     sourceFile = configuration.get('python_file')
@@ -36,17 +36,20 @@ class Clock():
 
     def stop(self):
         logger.info("Terminating clock loop")
-        self.eventLoop.terminate()
-        self.eventLoop.wait()
+        if self.eventLoop:
+            self.eventLoop.terminate()
+            self.eventLoop.wait()
 
     def start(self):
-        parser = argparse.ArgumentParser(description='The Hack Clock\'s custom code')
+        parser = argparse.ArgumentParser(description="The Hack Clock's custom code")
         parser.add_argument('--config', type=str, default='/etc/hack-clock.conf', help='path to configuration file')
         args = parser.parse_args()
 
         logger.info("Starting clock event loop")
+        logger.info(self.sourceFile)
+        logger.info(args.config)
 
-        self.eventLoop = subprocess.Popen(["python", self.sourceFile, "--config", args.config], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.eventLoop = subprocess.Popen(["python3", self.sourceFile, "--config", args.config], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     def restart(self):
         if self.status() == ProcessStatus.RUNNING:
@@ -61,7 +64,6 @@ class Clock():
 
         return self.stderr
 
-    # This is invoked when installed as a Bottle plugin
     def setup(self, app):
         logger.info("Loading clock event loop")
 
@@ -75,12 +77,14 @@ class Clock():
 
         self.start()
 
-    # This is invoked within Bottle as part of each route when installed
     def apply(self, callback, context):
-        conf = context.get('clock') or {}
+        logger.info(context)
+        #        conf = context.get('clock') or {}
+        conf = getattr(context, 'config', {})  # Use context.config if it exists, otherwise an empty dict
+
         keyword = conf.get('keyword', self.keyword)
 
-        args = inspect.getfullargspec(callback)[0]
+        args = inspect.getfullargspec(callback).args
         if keyword not in args:
             return callback
 
@@ -88,9 +92,9 @@ class Clock():
             kwargs[self.keyword] = self
             rv = callback(*args, **kwargs)
             return rv
+
         return wrapper
 
-    # De-installation from Bottle as a plugin
     def close(self):
         self.stop()
 
@@ -98,3 +102,4 @@ class PluginError(Exception):
     pass
 
 Plugin = Clock
+

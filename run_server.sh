@@ -1,9 +1,11 @@
 #!/bin/bash
 
-cd /home/iris/hack-clock
-source venv/bin/activate
-#export PYTHONPATH="$PYTHONPATH:$HOME/Projects/hack-clock/lib"
-export PYTHONPATH="$PYTHONPATH:$HOME/hack-clock/lib"
-cd srv/hackclock
-#../../scripts/run_server.py --config "$HOME/Projects/hack-clock/tests/localsettings.conf"
-../../scripts/run_server.py --config "$HOME/hack-clock/tests/localsettings.conf"
+set -e
+
+src=$(realpath "$(dirname "$0")")
+
+export PYTHONPATH="$PYTHONPATH:$src/lib"
+export PORT=8080
+source "$src/venv/bin/activate"
+cd "$src/srv/hackclock"
+"$src/scripts/run_server.py" --config "$src/tests/localsettings.conf"
