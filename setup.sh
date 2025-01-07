@@ -16,3 +16,5 @@ sudo /home/pi/hack-clock/run_server.sh &
 
 exit 0
 EOF
+
+echo "Now use rasp-config to enable I2C. See https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c for details"
