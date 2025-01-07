@@ -6,11 +6,11 @@ import sys
 import logging
 import json
 
-logging.basicConfig(level=logging.WARN, format='%(levelname)-8s %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)-8s %(message)s')
 logger = logging.getLogger('hack-clock')
 
 console = logging.StreamHandler()
-console.setLevel(logging.WARNING)
+console.setLevel(logging.DEBUG)
 logger.addHandler(console)
 
 import urllib
@@ -207,7 +207,7 @@ def blocks_save_event_loop(clock, body=None):
     backup_name = "%s/blocks_clock.%s" % (version_dir, datetime.now().isoformat())
     blocks_state = body.read() if body else request.body.read()
     if type(blocks_state) == bytes:
-        blocks_state = source_text.decode('utf-8')
+        blocks_state = blocks_state.decode('utf-8')
 
     try:
         blocks_file = configuration.get('blocks_file')
